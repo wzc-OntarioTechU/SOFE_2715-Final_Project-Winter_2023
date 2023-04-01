@@ -10,6 +10,6 @@ The topic of our prject is to implement and demonstrate k-means clustering (and 
 
 ## Authors
 
-### Group 21
+### Group 20
 
 William Chamberlain (100846922), Trent Jordan (100831853), Dmitri Rios Nadeau (100783206), Rolf-Jaden Sibal (100845721)
