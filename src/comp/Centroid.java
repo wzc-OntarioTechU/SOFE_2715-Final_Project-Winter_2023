@@ -32,7 +32,7 @@ public class Centroid extends Point {
 	 * be emptied.
 	 */
 	public void recenter() {
-		if (!owned.isEmpty()) {
+		if (owned == null || !owned.isEmpty()) {
 			// TODO: Centroid Calculation here
 		}
 		// empty ownership list

@@ -20,7 +20,7 @@ public class MapSpace {
 		for (int i = 0; i < points.length; i++) {
 			if (pnts[i] == null)
 				throw new IllegalArgumentException("Given points array contains a null index, which is not allowed.");
-			points[i] = pnts[i].clone();
+			points[i] = pnts[i];
 		}
 		for (int i = 0; i < cntrds.length; i++) {
 			if (cntrds[i] == null)
