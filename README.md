@@ -6,7 +6,7 @@ This project is created for the code portion of our groups SOFE 2715U (Data Stru
 
 ## Topic
 
-The topic of our project is to implement and demonstrate k-means clustering (and related algorithms).
+The topic of our project is to implement and demonstrate k-means clustering (k++ and related algorithms).
 
 ## Authors
 
