@@ -12,4 +12,4 @@ The topic of our prject is to implement and demonstrate k-means clustering (and 
 
 ### Group 21
 
-William Chamberlain (100846922), Trent Jordan (100831853), Dimitri Rios Nadeau (110783206), Rolf-Jaden Sibal (100845721)
+William Chamberlain (100846922), Trent Jordan (100831853), Dmitri Rios Nadeau (100783206), Rolf-Jaden Sibal (100845721)
