@@ -2,7 +2,7 @@ package comp;
 
 import java.util.LinkedList;
 import java.util.List;
-import Java.lang.Math;
+import java.lang.Math;
 
 /**
  * Centroid class to represent the k-means centroid type points. Effectively a
@@ -34,22 +34,20 @@ public class Centroid extends Point {
 	 */
 	public void recenter() {
 		if (owned == null || !owned.isEmpty()) {
-			//calculate mean x of owned points and set x to it
-			double sum = 0;
-			for(Point pnt : owned) {
-				sum += pnt.x;
+			// Calculated the mean of the cluster
+			double [] pointsMean = {0,0};
+			for(Point i : owned) {
+				pointsMean[0] += i.getX();
+				pointsMean[1] += i.getY();
 			}
-			this.x = sum / owned.size();
-			// repeat for y
-			sum = 0;
-			for(Point pnt : owned) {
-				sum += pnt.y;
-			}
-			this.y = sum / owned.size();
+			
+			x = pointsMean[0] / owned.size();
+			y = pointsMean[1] / owned.size();
 		}
 		// empty ownership list
 		owned.clear();
 	}
+
 
 	/**
 	 * This method calculates the distance from a given Point object to the Centroid

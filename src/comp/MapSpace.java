@@ -54,21 +54,20 @@ public class MapSpace {
 	 * Method to perform an iteration of the k means calculation on the MapSpace object.
 	 */
 	public void iterate() {
-
 		for (Point pnt : points) {
 			//initalize candidate centroid
-			Centroid candidate = centroids[0]
+			Centroid candidate = centroids[0];
 			double distanceCan = centroids[0].distanceTo(pnt);
 			//measure distance to all centroids
 			for (Centroid cntrd : centroids){
 				double distance = cntrd.distanceTo(pnt);
-				if (distance < distanceCan)){
+				if (distance < distanceCan){
 					candidate = cntrd;
 					distanceCan = distance;
 				}
 			}
 			//set closest centroid
-			candidate.ownPoint(pnt)
+			candidate.ownPoint(pnt);
 		}
 		// find new centroid position
 		for (Centroid cntrd : centroids){
