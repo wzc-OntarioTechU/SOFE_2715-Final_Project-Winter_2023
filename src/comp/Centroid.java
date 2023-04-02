@@ -34,7 +34,18 @@ public class Centroid extends Point {
 	 */
 	public void recenter() {
 		if (owned == null || !owned.isEmpty()) {
-			// TODO: Centroid Calculation here
+			//calculate mean x of owned points and set x to it
+			double sum = 0;
+			for(Point pnt : owned) {
+				sum += pnt.x;
+			}
+			this.x = sum / owned.size();
+			// repeat for y
+			sum = 0;
+			for(Point pnt : owned) {
+				sum += pnt.y;
+			}
+			this.y = sum / owned.size();
 		}
 		// empty ownership list
 		owned.clear();
