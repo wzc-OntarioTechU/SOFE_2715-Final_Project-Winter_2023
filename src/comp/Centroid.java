@@ -71,6 +71,15 @@ public class Centroid extends Point {
 	}
 
 	/**
+	 * Compare centroids by their list of owned points
+	 *
+	 * @param Centroid other is centroid being compared to this
+	 */
+	public boolean equals(Centroid other){
+		return owned.equals(other.getOwned());
+	}
+
+	/**
 	 * Returns a copy of the owned points list of the Centroid using a shallow copy
 	 * as to not recreate immutable Point objects but to disconnect mutability of
 	 * original list.

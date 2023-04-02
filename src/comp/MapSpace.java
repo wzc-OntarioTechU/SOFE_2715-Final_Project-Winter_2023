@@ -74,9 +74,21 @@ public class MapSpace {
 			cntrd.recenter();
 		}
 
-		//repeat and check for duplicates??
 	}
 
+	/**
+	 * Method to start the unsupervised model
+	 */
+	public void run() {
+		do {
+			// save current state
+			Centroid[] prevState = this.getCentroids();
+			//take one step
+			this.iterate();
+			//check if two states match
+		} while(!Arrays.equals((this.centroids, prevState));
+
+	}
 	/**
 	 * Returns a shallow copy of the Point objects array used in this MapSpace object (Used to prevent changes to internal array but shallow since Point objects are immutable).
 	 * @return An array of Point objects that is a shallow copy of the instance Point objects array.
