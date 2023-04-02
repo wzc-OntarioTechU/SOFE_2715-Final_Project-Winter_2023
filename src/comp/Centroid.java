@@ -2,6 +2,7 @@ package comp;
 
 import java.util.LinkedList;
 import java.util.List;
+import Java.lang.Math;
 
 /**
  * Centroid class to represent the k-means centroid type points. Effectively a
@@ -47,9 +48,8 @@ public class Centroid extends Point {
 	 * @return The distance from the given Point object to the Centroid Object
 	 */
 	public double distanceTo(Point pnt) {
-		// TODO: point distance calculation, check if this should be regular distance or
-		// r^2 distance
-		return 0;
+		//point distance calculation for r^2 distance. remove comma for r
+		return /*Math.sqrt(*/Math.pow(this.x-pnt.x,2)+Math.pow(this.y-pnt.y,2)/*)*/;
 	}
 
 	/**
