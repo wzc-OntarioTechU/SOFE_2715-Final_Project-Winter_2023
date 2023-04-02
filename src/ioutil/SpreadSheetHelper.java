@@ -1,6 +1,10 @@
 package ioutil;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import comp.Centroid;
@@ -18,9 +22,41 @@ public abstract class SpreadSheetHelper {
 	 * @param file A file reference to read Point object data from.
 	 * @return A list of Point objects read from the provided file.
 	 */
-	public static List<Point> readPoints(File file) {
-		// TODO: code to import a csv and turn into points goes here
-		return null;
+	public static List<Point> readPoints(File file, int colDataStart, int colDataEnd) {
+		// TODO: Check this code actually works
+		try {
+			List<Point> input = new ArrayList<Point>(); 
+			int count = 0;
+			FileReader csv = new FileReader(file);
+			BufferedReader dataset = new BufferedReader(csv);
+			
+			//Checks for negative ranges
+			if(colDataStart < 0 || colDataEnd < 0) {
+				dataset.close();
+				throw new IllegalArgumentException("Column Ranges cannot be negative");
+			}
+			//Flips the start and end columns if the start col is greater than the end col
+			if(colDataStart > colDataEnd)
+			{
+				int temp = colDataStart;
+				colDataStart = colDataEnd;
+				colDataEnd = temp;
+			}	
+			
+			String inputCSV = "";
+			//Consume labels
+			dataset.readLine();
+			while((inputCSV = dataset.readLine()) != null) {
+				String [] rows = inputCSV.split(",");
+				input.add(new Point(Integer.toString(count), (Double.parseDouble(rows[colDataStart])), (Double.parseDouble(rows[colDataEnd]))));
+			}
+			dataset.close();
+			return input;
+		} 
+		catch (IOException e) {
+			System.out.println("Unable to find the specified file path");
+			return null;
+		}
 	}
 
 	/**

@@ -80,13 +80,14 @@ public class MapSpace {
 	 * Method to start the unsupervised model
 	 */
 	public void run() {
+		Centroid [] prevState;
 		do {
 			// save current state
-			Centroid[] prevState = this.getCentroids();
+			prevState = this.getCentroids();
 			//take one step
 			this.iterate();
 			//check if two states match
-		} while(!Arrays.equals((this.centroids, prevState));
+		} while(!Arrays.equals(this.centroids, prevState));
 
 	}
 	/**

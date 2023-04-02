@@ -1,6 +1,5 @@
 package comp;
 
-import java.lang.Double
 /**
  * Point class to represent a generic data point in 2D space with a given ID.
  * The objects details are immutable after instantiation as these points should
@@ -79,6 +78,6 @@ public class Point {
 	}
 
 	public boolean equals(Point other) {
-		return ( Double.equals(this.x,other.x) && Double.equals(this.y,other.y) );
+		return (this.x == other.x && this.y == other.y);
 	}
 }
