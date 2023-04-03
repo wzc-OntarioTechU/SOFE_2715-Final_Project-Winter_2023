@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -25,6 +26,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import comp.Centroid;
 import comp.MapSpace;
+import comp.Point;
+import ioutil.ChartExportHelper;
+import ioutil.SpreadSheetHelper;
 
 import java.awt.Font;
 
@@ -32,6 +36,12 @@ public class MainWindow {
 
 	private JFrame frmKMeansClustering;
 	private JTextField filePathTextField;
+	private JSpinner startColSpinner;
+	private JSpinner endColSpinner;
+	private JSpinner centroidsSpinner;
+	private JRadioButton kppRadioBtn;
+	private Canvas canvas;
+	private int current;
 	private final ButtonGroup genRadioBtns = new ButtonGroup();
 	private List<Centroid[]> cntHist;
 	private MapSpace currProcess;
@@ -93,7 +103,7 @@ public class MainWindow {
 		gbc_settingsLabel.gridy = 0;
 		frmKMeansClustering.getContentPane().add(settingsLabel, gbc_settingsLabel);
 		
-		Canvas canvas = new Canvas();
+		canvas = new Canvas();
 		GridBagConstraints gbc_canvas = new GridBagConstraints();
 		gbc_canvas.gridheight = 7;
 		gbc_canvas.insets = new Insets(0, 0, 5, 5);
@@ -126,7 +136,7 @@ public class MainWindow {
 		gbc_chooseFileBtn.gridy = 1;
 		frmKMeansClustering.getContentPane().add(chooseFileBtn, gbc_chooseFileBtn);
 		
-		JSpinner startColSpinner = new JSpinner();
+		startColSpinner = new JSpinner();
 		startColSpinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		GridBagConstraints gbc_startColSpinner = new GridBagConstraints();
 		gbc_startColSpinner.anchor = GridBagConstraints.EAST;
@@ -143,7 +153,7 @@ public class MainWindow {
 		gbc_startColLabel.gridy = 2;
 		frmKMeansClustering.getContentPane().add(startColLabel, gbc_startColLabel);
 		
-		JSpinner endColSpinner = new JSpinner();
+		endColSpinner = new JSpinner();
 		endColSpinner.setModel(new SpinnerNumberModel(Integer.valueOf(2), Integer.valueOf(2), null, Integer.valueOf(1)));
 		GridBagConstraints gbc_endColSpinner = new GridBagConstraints();
 		gbc_endColSpinner.anchor = GridBagConstraints.EAST;
@@ -170,7 +180,7 @@ public class MainWindow {
 		gbc_randRadioBtn.gridy = 3;
 		frmKMeansClustering.getContentPane().add(randRadioBtn, gbc_randRadioBtn);
 		
-		JRadioButton kppRadioBtn = new JRadioButton("K++ Start");
+		kppRadioBtn = new JRadioButton("K++ Start");
 		genRadioBtns.add(kppRadioBtn);
 		GridBagConstraints gbc_kppRadioBtn = new GridBagConstraints();
 		gbc_kppRadioBtn.gridwidth = 2;
@@ -187,7 +197,7 @@ public class MainWindow {
 		});
 		exportCsvBtn.setText("Export csv Results");
 		
-		JSpinner centroidsSpinner = new JSpinner();
+		centroidsSpinner = new JSpinner();
 		centroidsSpinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
 		GridBagConstraints gbc_centroidsSpinner = new GridBagConstraints();
 		gbc_centroidsSpinner.anchor = GridBagConstraints.EAST;
@@ -294,15 +304,40 @@ public class MainWindow {
 	}
 
 	private void exportFile() {
-		
+		JFileChooser fpicker = new JFileChooser();
+		fpicker.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fpicker.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fpicker.setFileFilter(new FileNameExtensionFilter("csv","csv"));
+		if(fpicker.showSaveDialog(frmKMeansClustering) == JFileChooser.APPROVE_OPTION) {
+			File f = fpicker.getSelectedFile();
+			SpreadSheetHelper.writeResults(f, currProcess.getPoints(), cntHist);
+		}
 	}
 	
 	private void exportCharts() {
-		
+		JFileChooser fpicker = new JFileChooser();
+		fpicker.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fpicker.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fpicker.setFileFilter(new FileNameExtensionFilter("png","png"));
+		if(fpicker.showSaveDialog(frmKMeansClustering) == JFileChooser.APPROVE_OPTION) {
+			File f = fpicker.getSelectedFile();
+			ChartExportHelper exp = ChartExportHelper.getInstance();
+			try {
+				exp.exportAsCharts(f, currProcess.getPoints(), cntHist, true, true, true);
+			} catch (IOException e) {
+				System.err.println("Error in exporting charts: ");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void runProcess() {
-		
+		List<Point> pts = SpreadSheetHelper.readPoints(new File(filePathTextField.getText()), (Integer) startColSpinner.getValue() - 1, (Integer) endColSpinner.getValue() - 1);
+		currProcess = new MapSpace(pts.toArray(new Point[0]), (Integer) centroidsSpinner.getValue(), kppRadioBtn.isSelected());
+		cntHist = new LinkedList<Centroid[]>();
+		currProcess.run(cntHist);
+		ChartExportHelper exp = ChartExportHelper.getInstance();
+		canvas = exp.generateChart(canvas, pts.toArray(new Point[0]), cntHist.get(cntHist.size() - 1), true, true, true);
 	}
 	
 	private void prev() {
