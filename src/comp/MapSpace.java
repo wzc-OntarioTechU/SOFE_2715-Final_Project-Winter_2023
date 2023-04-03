@@ -130,7 +130,7 @@ public class MapSpace {
 	/**
 	 * Method to start the unsupervised model
 	 */
-	public void run(List<Centroids[]> cntrdList) {
+	public void run(List<Centroid[]> cntrdList) {
 		Centroid [] prevState;
 		do {
 			// save current state
