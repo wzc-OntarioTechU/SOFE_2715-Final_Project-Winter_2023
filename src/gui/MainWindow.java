@@ -129,7 +129,7 @@ public class MainWindow {
 		gbc_startColSpinner.gridy = 2;
 		frmKMeansClustering.getContentPane().add(startColSpinner, gbc_startColSpinner);
 		
-		JLabel startColLabel = new JLabel("Start Column");
+		JLabel startColLabel = new JLabel("X Data Column");
 		GridBagConstraints gbc_startColLabel = new GridBagConstraints();
 		gbc_startColLabel.anchor = GridBagConstraints.WEST;
 		gbc_startColLabel.insets = new Insets(0, 0, 5, 5);

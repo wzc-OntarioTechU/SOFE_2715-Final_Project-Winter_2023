@@ -46,8 +46,6 @@ public abstract class SpreadSheetHelper {
 			}	
 			
 			String inputCSV = "";
-			//Consume labels
-			dataset.readLine();
 			try {
 				while((inputCSV = dataset.readLine()) != null) {
 					String [] cols = inputCSV.split(",");
