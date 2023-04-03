@@ -57,7 +57,7 @@ public class Centroid extends Point {
 	 * @return The distance from the given Point object to the Centroid Object
 	 */
 	public double distanceTo(Point pnt) {
-		//point distance calculation for r^2 distance. remove comma for r
+		//point distance calculation for r^2 distance. remove comment for r
 		return /*Math.sqrt(*/Math.pow(this.x-pnt.x,2)+Math.pow(this.y-pnt.y,2)/*)*/;
 	}
 

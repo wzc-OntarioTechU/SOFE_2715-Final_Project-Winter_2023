@@ -1,6 +1,7 @@
 package comp;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class MapSpace {
 	private Point[] points;
@@ -79,7 +80,23 @@ public class MapSpace {
 	 * @param numCentroids An integer of the number of Centroid objects to generate.
 	 */
 	public MapSpace(Point[] pnts, int numCentroids) {
+		double lowX = highX = points[0].getX();
+		double lowY = highY = points[0].getY();
+		for(Point pnt : points) {
+			if(pnt.getX() < lowX)
+				lowX = pnt.getX();
+			if(pnt.getX() > highX)
+				highX = pnt.getX();
+			if(pnt.getY() < lowY)
+				lowY = pnt.getY();
+			if(pnt.getY() > highY)
+				highY = pnt.getY();
+		}
 		this(pnts, numCentroids, false);
+
+		for (int i = 0; i < numCentroids; i++) {
+			Centroid newCent = new Centroid("", Math.Random() * (highX - lowX) + lowX,  Math.Random() * (highY - lowY) + lowY);
+		}
 	}
 
 	/**
