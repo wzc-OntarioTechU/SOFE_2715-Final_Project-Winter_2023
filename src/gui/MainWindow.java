@@ -20,12 +20,20 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
 public class MainWindow {
 
 	private JFrame frmKMeansClustering;
 	private JTextField filePathTextField;
 	private final ButtonGroup genRadioBtns = new ButtonGroup();
+	private final Action openFilePicker = new SwingAction();
+	private final Action runProcess = new SwingAction_1();
+	private final Action exportCsv = new SwingAction_2();
+	private final Action exportCharts = new SwingAction_3();
+	private final Action prevSwitch = new SwingAction_4();
+	private final Action nextSwitch = new SwingAction_5();
 
 	/**
 	 * Launch the application.
@@ -102,7 +110,9 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(filePathTextField, gbc_filePathTextField);
 		filePathTextField.setColumns(10);
 		
-		JButton chooseFileBtn = new JButton("Choose File");
+		JButton chooseFileBtn = new JButton(openFilePicker);
+		chooseFileBtn.setName("Open File");
+		chooseFileBtn.setText("Choose File");
 		GridBagConstraints gbc_chooseFileBtn = new GridBagConstraints();
 		gbc_chooseFileBtn.gridwidth = 2;
 		gbc_chooseFileBtn.insets = new Insets(0, 0, 5, 0);
@@ -164,10 +174,8 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(kppRadioBtn, gbc_kppRadioBtn);
 		
 		JButton exportCsvBtn = new JButton("Export csv Results");
-		exportCsvBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		exportCsvBtn.setAction(exportCsv);
+		exportCsvBtn.setText("Export csv Results");
 		
 		JSpinner centroidsSpinner = new JSpinner();
 		centroidsSpinner.setModel(new SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
@@ -189,6 +197,8 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(centroidsLabel, gbc_centroidsLabel);
 		
 		JButton startBtn = new JButton("Start");
+		startBtn.setAction(runProcess);
+		startBtn.setText("Start");
 		GridBagConstraints gbc_startBtn = new GridBagConstraints();
 		gbc_startBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_startBtn.gridwidth = 4;
@@ -205,6 +215,8 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(exportCsvBtn, gbc_exportCsvBtn);
 		
 		JButton exportChartsBtn = new JButton("Export Charts");
+		exportChartsBtn.setAction(exportCharts);
+		exportChartsBtn.setText("Export Charts");
 		GridBagConstraints gbc_exportChartsBtn = new GridBagConstraints();
 		gbc_exportChartsBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_exportChartsBtn.gridwidth = 2;
@@ -214,6 +226,8 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(exportChartsBtn, gbc_exportChartsBtn);
 		
 		JButton prevBtn = new JButton("Previous Iteration");
+		prevBtn.setAction(prevSwitch);
+		prevBtn.setText("Previous Iteration");
 		GridBagConstraints gbc_prevBtn = new GridBagConstraints();
 		gbc_prevBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_prevBtn.gridwidth = 2;
@@ -223,6 +237,8 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(prevBtn, gbc_prevBtn);
 		
 		JButton nextBtn = new JButton("Next Iteration");
+		nextBtn.setAction(nextSwitch);
+		nextBtn.setText("Next Iteration");
 		GridBagConstraints gbc_nextBtn = new GridBagConstraints();
 		gbc_nextBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_nextBtn.gridwidth = 2;
@@ -231,4 +247,52 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(nextBtn, gbc_nextBtn);
 	}
 
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_1 extends AbstractAction {
+		public SwingAction_1() {
+			putValue(NAME, "SwingAction_1");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_2 extends AbstractAction {
+		public SwingAction_2() {
+			putValue(NAME, "SwingAction_2");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_3 extends AbstractAction {
+		public SwingAction_3() {
+			putValue(NAME, "SwingAction_3");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_4 extends AbstractAction {
+		public SwingAction_4() {
+			putValue(NAME, "SwingAction_4");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
+	private class SwingAction_5 extends AbstractAction {
+		public SwingAction_5() {
+			putValue(NAME, "SwingAction_5");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
 }
