@@ -130,11 +130,11 @@ public class MapSpace {
 	/**
 	 * Method to start the unsupervised model
 	 */
-	public void run() {
+	public void run(List<Centroids[]> cntrdList) {
 		Centroid [] prevState;
 		do {
 			// save current state
-			prevState = this.getCentroids();
+			cntrdList.add(this.getCentroids());
 			//take one step
 			this.iterate();
 			//check if two states match
