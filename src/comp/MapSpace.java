@@ -71,12 +71,12 @@ public class MapSpace {
 	    } 
 	    else {
 			// use random position within range of data
-			double lowX, highX = points[0].getX();
-			double lowY, highY = points[0].getY();
+			double lowX, highX = pnts[0].getX();
+			double lowY, highY = pnts[0].getY();
 			lowX = highX;
 			lowY = highY;
 			// find range of points
-			for(Point pnt : points) {
+			for(Point pnt : pnts) {
 				if(pnt.getX() < lowX)
 					lowX = pnt.getX();
 				if(pnt.getX() > highX)
@@ -86,6 +86,8 @@ public class MapSpace {
 				if(pnt.getY() > highY)
 					highY = pnt.getY();
 			}
+			this.points = pnts; // TODO: bandaid
+			centroids = new Centroid[numCentroids];
 			for (int i = 0; i < numCentroids; i++) {
 				Centroid newCent = new Centroid("", Math.random() * (highX - lowX) + lowX,  Math.random() * (highY - lowY) + lowY);
 				centroids[i] = (newCent);

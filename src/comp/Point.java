@@ -77,7 +77,8 @@ public class Point {
 		return str.toString();
 	}
 
-	public boolean equals(Point other) {
-		return (this.x == other.x && this.y == other.y);
+	@Override
+	public boolean equals(Object other) {
+		return (other.getClass() == this.getClass()) && (this.x == ((Point) other).x && this.y == ((Point) other).y);
 	}
 }

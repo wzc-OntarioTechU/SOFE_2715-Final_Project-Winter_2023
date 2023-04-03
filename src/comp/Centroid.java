@@ -35,19 +35,18 @@ public class Centroid extends Point {
 	public void recenter() {
 		if (owned == null || !owned.isEmpty()) {
 			// Calculated the mean of the cluster
-			double [] pointsMean = {0,0};
-			for(Point i : owned) {
+			double[] pointsMean = { 0, 0 };
+			for (Point i : owned) {
 				pointsMean[0] += i.getX();
 				pointsMean[1] += i.getY();
 			}
-			
+
 			x = pointsMean[0] / owned.size();
 			y = pointsMean[1] / owned.size();
 		}
 		// empty ownership list
 		owned.clear();
 	}
-
 
 	/**
 	 * This method calculates the distance from a given Point object to the Centroid
@@ -57,8 +56,8 @@ public class Centroid extends Point {
 	 * @return The distance from the given Point object to the Centroid Object
 	 */
 	public double distanceTo(Point pnt) {
-		//point distance calculation for r^2 distance. remove comment for r
-		return /*Math.sqrt(*/Math.pow(this.x-pnt.x,2)+Math.pow(this.y-pnt.y,2)/*)*/;
+		// point distance calculation for r^2 distance. remove comment for r
+		return /* Math.sqrt( */Math.pow(this.x - pnt.x, 2) + Math.pow(this.y - pnt.y, 2)/* ) */;
 	}
 
 	/**
@@ -75,8 +74,10 @@ public class Centroid extends Point {
 	 *
 	 * @param Centroid other is centroid being compared to this
 	 */
-	public boolean equals(Centroid other){
-		return owned.equals(other.getOwned());
+	@Override
+	public boolean equals(Object other) {
+		return (other.getClass() == this.getClass()) && (owned.equals(((Centroid) other).getOwned()))
+				&& (this.getX() == ((Centroid) other).getX()) && (this.getY() == ((Centroid) other).getY());
 	}
 
 	/**
@@ -90,11 +91,11 @@ public class Centroid extends Point {
 	public List<Point> getOwned() {
 		return (List<Point>) owned.clone();
 	}
-	
+
 	@Override
 	public Centroid clone() {
 		Centroid temp = new Centroid(this.getID(), this.x, this.y);
-		for(Point pnt : owned) {
+		for (Point pnt : owned) {
 			temp.ownPoint(pnt);
 		}
 		return temp;

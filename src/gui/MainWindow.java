@@ -333,11 +333,11 @@ public class MainWindow {
 	
 	private void runProcess() {
 		List<Point> pts = SpreadSheetHelper.readPoints(new File(filePathTextField.getText()), (Integer) startColSpinner.getValue() - 1, (Integer) endColSpinner.getValue() - 1);
-		currProcess = new MapSpace(pts.toArray(new Point[0]), (Integer) centroidsSpinner.getValue(), kppRadioBtn.isSelected());
+		currProcess = new MapSpace(pts.toArray(new Point[1]), (Integer) centroidsSpinner.getValue(), kppRadioBtn.isSelected());
 		cntHist = new LinkedList<Centroid[]>();
 		currProcess.run(cntHist);
 		ChartExportHelper exp = ChartExportHelper.getInstance();
-		canvas = exp.generateChart(canvas, pts.toArray(new Point[0]), cntHist.get(cntHist.size() - 1), true, true, true);
+		canvas = exp.generateChart(canvas, pts.toArray(new Point[1]), cntHist.get(cntHist.size() - 1), true, true, true);
 	}
 	
 	private void prev() {
