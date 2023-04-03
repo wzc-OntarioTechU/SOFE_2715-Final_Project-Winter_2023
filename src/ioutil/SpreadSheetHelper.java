@@ -24,7 +24,7 @@ public abstract class SpreadSheetHelper {
 	 * @param file A file reference to read Point object data from.
 	 * @return A list of Point objects read from the provided file.
 	 */
-	public static List<Point> readPoints(File file, int colDataStart, int colDataEnd) {
+	public static List<Point> readPoints(File file, int firstCol, int secondCol) {
 		// TODO: Check this code actually works
 		try {
 			List<Point> input = new ArrayList<Point>(); 
@@ -33,23 +33,23 @@ public abstract class SpreadSheetHelper {
 			BufferedReader dataset = new BufferedReader(csv);
 			
 			//Checks for negative ranges
-			if(colDataStart < 0 || colDataEnd < 0) {
+			if(firstCol < 0 || secondCol < 0) {
 				dataset.close();
 				throw new IllegalArgumentException("Column Ranges cannot be negative");
 			}
 			//Flips the start and end columns if the start col is greater than the end col
-			if(colDataStart > colDataEnd)
+			if(firstCol > secondCol)
 			{
-				int temp = colDataStart;
-				colDataStart = colDataEnd;
-				colDataEnd = temp;
+				int temp = firstCol;
+				firstCol = secondCol;
+				secondCol = temp;
 			}	
 			
 			String inputCSV = "";
 			try {
 				while((inputCSV = dataset.readLine()) != null) {
 					String [] cols = inputCSV.split(",");
-					input.add(new Point(Integer.toString(count), (Double.parseDouble(cols[colDataStart])), (Double.parseDouble(cols[colDataEnd]))));
+					input.add(new Point(Integer.toString(count), (Double.parseDouble(cols[firstCol])), (Double.parseDouble(cols[secondCol]))));
 				}
 				dataset.close();
 				return input;
@@ -73,9 +73,10 @@ public abstract class SpreadSheetHelper {
 	 * @param file A file reference to read Point object data from.
 	 * @return A list of Centroid objects read from the provided file.
 	 */
-	public static List<Centroid> readCentriods(File file) {
-		// TODO: code to import a csv and turn into points goes here
-		return null;
+	public static List<Centroid> readCentriods(File file, int firstCol, int secondCol) {
+		List<Centroid> input = new ArrayList<Centroid>();
+		input.add((Centroid) readPoints(file, firstCol, secondCol));
+		return input;
 	}
 
 	/**
@@ -89,27 +90,35 @@ public abstract class SpreadSheetHelper {
 	 */
 	public static void writeResults(File file, Point[] pnts, List<Centroid[]> cntHistory) {
 		// TODO: Check this code works
+		//Use File file as a folder path instead
 		try {
-			FileWriter csvOut = new FileWriter("K-Means Clusters of " + file.getName() + ".csv");
-			PrintWriter output = new PrintWriter(csvOut);
-			//Create Col Labels
-			for(int i = 0; i < cntHistory.size(); i++) {
+		FileWriter [] csvOut = new FileWriter[cntHistory.size()];
+		PrintWriter [] output = new PrintWriter[cntHistory.size()];
+		int iterate = cntHistory.size();
+		if(iterate > 10)
+			iterate = 10;
+		
+		for(int i = 0; i < iterate; i++) {
+			csvOut[i] = new FileWriter(file + "Iteration " + i + ".csv");
+			output[i] = new PrintWriter(csvOut[i]);
+			//Create Column Labels
+			for(int j = 0; j < cntHistory.size(); j++) {
 				//Cannot use parent methods here? need GetX and GetY
-				output.print("Clustered points around centroid at: (" + cntHistory.get(i) + ")");
+				output[i].print("Points belonging to cluster " + j + "located at: " + "x:" + cntHistory.get(i)[j].getX() + "Y:" + cntHistory.get(i)[j].getY());
 			}
 			
 			//Print Data to csv file
 			for(Point temp : pnts) {
-				for(int i = 0; i < cntHistory.size(); i++) {
-					output.print("x:" + temp.getX() + " y:" + temp.getY());
-					output.print(",");
+				for(int j = 0; j < cntHistory.size(); j++) {
+					output[i].print("x:" + temp.getX() + " y:" + temp.getY());
+					output[i].print(",");
 				}
-				output.println();
+				output[i].println();
 			}
-			output.close();
-
-			
-		} catch (IOException e) {
+			output[i].close();
+		}
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("File creation failed");
 			e.printStackTrace();
