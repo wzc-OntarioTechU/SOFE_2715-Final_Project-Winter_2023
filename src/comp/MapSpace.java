@@ -134,7 +134,8 @@ public class MapSpace {
 		Centroid [] prevState;
 		do {
 			// save current state
-			cntrdList.add(this.getCentroids());
+			prevState = this.getCentroids()
+			cntrdList.add(prevState);
 			//take one step
 			this.iterate();
 			//check if two states match
