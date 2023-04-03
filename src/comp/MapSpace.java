@@ -1,6 +1,7 @@
 package comp;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class MapSpace {
@@ -70,8 +71,10 @@ public class MapSpace {
 	    } 
 	    else {
 			// use random position within range of data
-			double lowX = highX = points[0].getX();
-			double lowY = highY = points[0].getY();
+			double lowX, highX = points[0].getX();
+			double lowY, highY = points[0].getY();
+			lowX = highX;
+			lowY = highY;
 			// find range of points
 			for(Point pnt : points) {
 				if(pnt.getX() < lowX)
@@ -84,8 +87,8 @@ public class MapSpace {
 					highY = pnt.getY();
 			}
 			for (int i = 0; i < numCentroids; i++) {
-				Centroid newCent = new Centroid("", Math.Random() * (highX - lowX) + lowX,  Math.Random() * (highY - lowY) + lowY);
-				centroids.append(newCent);
+				Centroid newCent = new Centroid("", Math.random() * (highX - lowX) + lowX,  Math.random() * (highY - lowY) + lowY);
+				centroids[i] = (newCent);
 			}
 	    }
 
@@ -134,7 +137,7 @@ public class MapSpace {
 		Centroid [] prevState;
 		do {
 			// save current state
-			prevState = this.getCentroids()
+			prevState = this.getCentroids();
 			cntrdList.add(prevState);
 			//take one step
 			this.iterate();
