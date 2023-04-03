@@ -3,7 +3,6 @@ package gui;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
@@ -12,33 +11,30 @@ import java.awt.Insets;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import comp.Centroid;
+import comp.MapSpace;
+
 import java.awt.Font;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 public class MainWindow {
 
 	private JFrame frmKMeansClustering;
 	private JTextField filePathTextField;
 	private final ButtonGroup genRadioBtns = new ButtonGroup();
-	//private final Action openFilePicker = new SwingAction();
-	private final Action runProcess = new SwingAction_1();
-	private final Action exportCsv = new SwingAction_2();
-	private final Action exportCharts = new SwingAction_3();
-	private final Action prevSwitch = new SwingAction_4();
-	private final Action nextSwitch = new SwingAction_5();
+	private List<Centroid[]> cntHist;
+	private MapSpace currProcess;
 
 	/**
 	 * Launch the application.
@@ -73,9 +69,9 @@ public class MainWindow {
 		frmKMeansClustering.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{501, 0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frmKMeansClustering.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel canvasTitle = new JLabel("Canvas Title");
@@ -100,7 +96,7 @@ public class MainWindow {
 		Canvas canvas = new Canvas();
 		GridBagConstraints gbc_canvas = new GridBagConstraints();
 		gbc_canvas.gridheight = 7;
-		gbc_canvas.insets = new Insets(0, 0, 0, 5);
+		gbc_canvas.insets = new Insets(0, 0, 5, 5);
 		gbc_canvas.gridx = 0;
 		gbc_canvas.gridy = 1;
 		frmKMeansClustering.getContentPane().add(canvas, gbc_canvas);
@@ -184,7 +180,11 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(kppRadioBtn, gbc_kppRadioBtn);
 		
 		JButton exportCsvBtn = new JButton("Export csv Results");
-		exportCsvBtn.setAction(exportCsv);
+		exportCsvBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				exportFile();
+			}
+		});
 		exportCsvBtn.setText("Export csv Results");
 		
 		JSpinner centroidsSpinner = new JSpinner();
@@ -207,7 +207,11 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(centroidsLabel, gbc_centroidsLabel);
 		
 		JButton startBtn = new JButton("Start");
-		startBtn.setAction(runProcess);
+		startBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				runProcess();
+			}
+		});
 		startBtn.setText("Start");
 		GridBagConstraints gbc_startBtn = new GridBagConstraints();
 		gbc_startBtn.fill = GridBagConstraints.HORIZONTAL;
@@ -225,7 +229,11 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(exportCsvBtn, gbc_exportCsvBtn);
 		
 		JButton exportChartsBtn = new JButton("Export Charts");
-		exportChartsBtn.setAction(exportCharts);
+		exportChartsBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				exportCharts();
+			}
+		});
 		exportChartsBtn.setText("Export Charts");
 		GridBagConstraints gbc_exportChartsBtn = new GridBagConstraints();
 		gbc_exportChartsBtn.fill = GridBagConstraints.HORIZONTAL;
@@ -236,86 +244,72 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(exportChartsBtn, gbc_exportChartsBtn);
 		
 		JButton prevBtn = new JButton("Previous Iteration");
-		prevBtn.setAction(prevSwitch);
+		prevBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				prev();
+			}
+		});
 		prevBtn.setText("Previous Iteration");
 		GridBagConstraints gbc_prevBtn = new GridBagConstraints();
 		gbc_prevBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_prevBtn.gridwidth = 2;
-		gbc_prevBtn.insets = new Insets(0, 0, 0, 5);
+		gbc_prevBtn.insets = new Insets(0, 0, 5, 5);
 		gbc_prevBtn.gridx = 1;
 		gbc_prevBtn.gridy = 7;
 		frmKMeansClustering.getContentPane().add(prevBtn, gbc_prevBtn);
 		
 		JButton nextBtn = new JButton("Next Iteration");
-		nextBtn.setAction(nextSwitch);
+		nextBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				next();
+			}
+		});
 		nextBtn.setText("Next Iteration");
 		GridBagConstraints gbc_nextBtn = new GridBagConstraints();
+		gbc_nextBtn.insets = new Insets(0, 0, 5, 0);
 		gbc_nextBtn.fill = GridBagConstraints.HORIZONTAL;
 		gbc_nextBtn.gridwidth = 2;
 		gbc_nextBtn.gridx = 3;
 		gbc_nextBtn.gridy = 7;
 		frmKMeansClustering.getContentPane().add(nextBtn, gbc_nextBtn);
+		
+		JLabel lblNewLabel = new JLabel("Run TIme");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.gridwidth = 5;
+		gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+		gbc_lblNewLabel.gridx = 0;
+		gbc_lblNewLabel.gridy = 8;
+		frmKMeansClustering.getContentPane().add(lblNewLabel, gbc_lblNewLabel);
 	}
 
-	/**private class SwingAction extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-	 * @return **/
-		private void pickFile() {
-			JFileChooser fpicker = new JFileChooser();
-			fpicker.setCurrentDirectory(new File(System.getProperty("user.home")));
-			fpicker.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fpicker.setFileFilter(new FileNameExtensionFilter("csv","csv"));
-			if(fpicker.showOpenDialog(frmKMeansClustering) == JFileChooser.APPROVE_OPTION) {
-				File f = fpicker.getSelectedFile();
-				filePathTextField.setText(f.toString());
-			}
-		}
-		/**public void actionPerformed(ActionEvent e) {
-		}
-	}**/
-	private class SwingAction_1 extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction_1() {
-			putValue(NAME, "SwingAction_1");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
+	private void pickFile() {
+		JFileChooser fpicker = new JFileChooser();
+		fpicker.setCurrentDirectory(new File(System.getProperty("user.home")));
+		fpicker.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		fpicker.setFileFilter(new FileNameExtensionFilter("csv","csv"));
+		if(fpicker.showOpenDialog(frmKMeansClustering) == JFileChooser.APPROVE_OPTION) {
+			File f = fpicker.getSelectedFile();
+			filePathTextField.setText(f.toString());
 		}
 	}
-	private class SwingAction_2 extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction_2() {
-			putValue(NAME, "SwingAction_2");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
+
+	private void exportFile() {
+		
 	}
-	private class SwingAction_3 extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction_3() {
-			putValue(NAME, "SwingAction_3");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
+	
+	private void exportCharts() {
+		
 	}
-	private class SwingAction_4 extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction_4() {
-			putValue(NAME, "SwingAction_4");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
+	
+	private void runProcess() {
+		
 	}
-	private class SwingAction_5 extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction_5() {
-			putValue(NAME, "SwingAction_5");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
+	
+	private void prev() {
+		
+	}
+	
+	private void next() {
+		
 	}
 }
