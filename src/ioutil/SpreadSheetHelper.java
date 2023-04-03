@@ -104,16 +104,16 @@ public abstract class SpreadSheetHelper {
 			//Create Column Labels
 			for(int j = 0; j < cntHistory.size(); j++) {
 				//Cannot use parent methods here? need GetX and GetY
-				output[i].print("Points belonging to cluster " + j + "located at: " + "x:" + cntHistory.get(i)[j].getX() + "Y:" + cntHistory.get(i)[j].getY());
+				output[i].print("Points belonging to cluster " + j + "located at: " + "x:" + cntHistory.get(i)[j].getX() + "Y:" + cntHistory.get(i)[j].getY() + ",");
 			}
 			
 			//Print Data to csv file
 			for(Point temp : pnts) {
+				output[i].println();
 				for(int j = 0; j < cntHistory.size(); j++) {
 					output[i].print("x:" + temp.getX() + " y:" + temp.getY());
 					output[i].print(",");
 				}
-				output[i].println();
 			}
 			output[i].close();
 		}
