@@ -13,12 +13,17 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.ButtonGroup;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import java.awt.Font;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -28,7 +33,7 @@ public class MainWindow {
 	private JFrame frmKMeansClustering;
 	private JTextField filePathTextField;
 	private final ButtonGroup genRadioBtns = new ButtonGroup();
-	private final Action openFilePicker = new SwingAction();
+	//private final Action openFilePicker = new SwingAction();
 	private final Action runProcess = new SwingAction_1();
 	private final Action exportCsv = new SwingAction_2();
 	private final Action exportCharts = new SwingAction_3();
@@ -110,7 +115,12 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(filePathTextField, gbc_filePathTextField);
 		filePathTextField.setColumns(10);
 		
-		JButton chooseFileBtn = new JButton(openFilePicker);
+		JButton chooseFileBtn = new JButton();
+		chooseFileBtn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pickFile();
+			}
+		});
 		chooseFileBtn.setName("Open File");
 		chooseFileBtn.setText("Choose File");
 		GridBagConstraints gbc_chooseFileBtn = new GridBagConstraints();
@@ -247,15 +257,24 @@ public class MainWindow {
 		frmKMeansClustering.getContentPane().add(nextBtn, gbc_nextBtn);
 	}
 
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
+	/**private class SwingAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
+	 * @return **/
+		private void pickFile() {
+			JFileChooser fpicker = new JFileChooser();
+			fpicker.setCurrentDirectory(new File(System.getProperty("user.home")));
+			fpicker.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fpicker.setFileFilter(new FileNameExtensionFilter("csv","csv"));
+			if(fpicker.showOpenDialog(frmKMeansClustering) == JFileChooser.APPROVE_OPTION) {
+				File f = fpicker.getSelectedFile();
+				filePathTextField.setText(f.toString());
+			}
 		}
-		public void actionPerformed(ActionEvent e) {
+		/**public void actionPerformed(ActionEvent e) {
 		}
-	}
+	}**/
 	private class SwingAction_1 extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction_1() {
 			putValue(NAME, "SwingAction_1");
 			putValue(SHORT_DESCRIPTION, "Some short description");
@@ -264,6 +283,7 @@ public class MainWindow {
 		}
 	}
 	private class SwingAction_2 extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction_2() {
 			putValue(NAME, "SwingAction_2");
 			putValue(SHORT_DESCRIPTION, "Some short description");
@@ -272,6 +292,7 @@ public class MainWindow {
 		}
 	}
 	private class SwingAction_3 extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction_3() {
 			putValue(NAME, "SwingAction_3");
 			putValue(SHORT_DESCRIPTION, "Some short description");
@@ -280,6 +301,7 @@ public class MainWindow {
 		}
 	}
 	private class SwingAction_4 extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction_4() {
 			putValue(NAME, "SwingAction_4");
 			putValue(SHORT_DESCRIPTION, "Some short description");
@@ -288,6 +310,7 @@ public class MainWindow {
 		}
 	}
 	private class SwingAction_5 extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction_5() {
 			putValue(NAME, "SwingAction_5");
 			putValue(SHORT_DESCRIPTION, "Some short description");
