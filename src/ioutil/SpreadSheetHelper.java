@@ -3,7 +3,9 @@ package ioutil;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,15 +48,22 @@ public abstract class SpreadSheetHelper {
 			String inputCSV = "";
 			//Consume labels
 			dataset.readLine();
-			while((inputCSV = dataset.readLine()) != null) {
-				String [] rows = inputCSV.split(",");
-				input.add(new Point(Integer.toString(count), (Double.parseDouble(rows[colDataStart])), (Double.parseDouble(rows[colDataEnd]))));
+			try {
+				while((inputCSV = dataset.readLine()) != null) {
+					String [] cols = inputCSV.split(",");
+					input.add(new Point(Integer.toString(count), (Double.parseDouble(cols[colDataStart])), (Double.parseDouble(cols[colDataEnd]))));
+				}
+				dataset.close();
+				return input;
 			}
-			dataset.close();
-			return input;
+			catch(IllegalArgumentException e) {
+				System.out.println("Invalid Data type");
+				return null;
+			}
 		} 
 		catch (IOException e) {
 			System.out.println("Unable to find the specified file path");
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -81,7 +90,32 @@ public abstract class SpreadSheetHelper {
 	 *                   Centroid history in the output file.
 	 */
 	public static void writeResults(File file, Point[] pnts, List<Centroid[]> cntHistory) {
-		// TODO: code to export results as a csv goes here
+		// TODO: Check this code works
+		try {
+			FileWriter csvOut = new FileWriter("K-Means Clusters of " + file.getName() + ".csv");
+			PrintWriter output = new PrintWriter(csvOut);
+			//Create Col Labels
+			for(int i = 0; i < cntHistory.size(); i++) {
+				//Cannot use parent methods here? need GetX and GetY
+				output.print("Clustered points around centroid at: (" + cntHistory.get(i) + ")");
+			}
+			
+			//Print Data to csv file
+			for(Point temp : pnts) {
+				for(int i = 0; i < cntHistory.size(); i++) {
+					output.print("x:" + temp.getX() + " y:" + temp.getY());
+					output.print(",");
+				}
+				output.println();
+			}
+			output.close();
+
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			System.out.println("File creation failed");
+			e.printStackTrace();
+		}
 
 	}
 }
