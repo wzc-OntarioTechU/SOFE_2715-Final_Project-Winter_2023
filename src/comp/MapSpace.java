@@ -37,8 +37,40 @@ public class MapSpace {
 	 * @param kPlusPlus A boolean of whether to use k++ generation or random (true for k++).
 	 */
 	public MapSpace(Point[] pnts, int numCentroids, boolean kPlusPlus) {
-		// TODO: Implement centroid generation algorithms (random, and k++)
-		this(pnts, null); // TODO: replace null with generated centroids list
+		  // Generate centroids using k++ initialization
+	    if (kPlusPlus) {
+	        centroids = new Centroid[numCentroids];
+	        centroids[0] = (Centroid)(pnts[(int)(Math.random() * pnts.length)]);
+
+	        for (int i = 1; i < numCentroids; i++) {
+	            double[] distances = new double[pnts.length];
+	            double sum = 0.0;
+	            for (int j = 0; j < pnts.length; j++) {
+	                Point p = pnts[j];
+	                double minDist = Double.MAX_VALUE;
+	                for (int k = 0; k < i; k++) {
+	                    double dist = centroids[k].distanceTo(p);
+	                    if (dist < minDist) {
+	                        minDist = dist;
+	                    }
+	                }
+	                distances[j] = minDist * minDist;
+	                sum += distances[j];
+	            }
+
+	            double rand = Math.random() * sum;
+	            int index = 0;
+	            while (rand > 0 && index < pnts.length - 1) {
+	                rand -= distances[index];
+	                index++;
+	            }
+	            centroids[i] = (Centroid) (pnts[index]);
+	        }
+	    } 
+	    else {
+	        
+	    }
+
 	}
 	
 	/**
